@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <string.h>
+
+// Helper function to expand around center and find the longest palindrome
+void expandAroundCenter(char* s, int left, int right, int* start, int* maxLen) {
+    // Expand as long as the characters on both sides are equal
+    while (left >= 0 && right < strlen(s) && s[left] == s[right]) {
+        left--;
+        right++;
+    }
+    
+    // Update the start index and maxLen if the new palindrome is longer
+    if (right - left - 1 > *maxLen) {
+        *start = left + 1;
+        *maxLen = right - left - 1;
+    }
+}
+
+// Main function to find the longest palindromic substring
+char* longestPalindrome(char* s) {
+    if (s == NULL || strlen(s) == 0) {
+        return "";
+    }
+
+    int start = 0;  // To store the start index of the longest palindrome
+    int maxLen = 1; // The length of the longest palindrome
+
+    for (int i = 0; i < strlen(s); i++) {
+        // Check for odd-length palindrome (single character center)
+        expandAroundCenter(s, i, i, &start, &maxLen);
+
+        // Check for even-length palindrome (two characters center)
+        expandAroundCenter(s, i, i + 1, &start, &maxLen);
+    }
+
+    // Allocate memory for the result and copy the palindrome
+    char* result = (char*)malloc((maxLen + 1) * sizeof(char));
+    strncpy(result, s + start, maxLen);
+    result[maxLen] = '\0';
+
+    return result;
+}
+

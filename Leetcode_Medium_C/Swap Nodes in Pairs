@@ -1,0 +1,47 @@
+
+struct ListNode* createNode(int val) {
+    struct ListNode* node = (struct ListNode*)malloc(sizeof(struct ListNode));
+    node->val = val;
+    node->next = NULL;
+    return node;
+}
+struct ListNode* swapPairs(struct ListNode* head) {
+    if (head == NULL || head->next == NULL) {
+        return head; 
+    }
+    struct ListNode* dummy = createNode(0);
+    dummy->next = head;
+    struct ListNode* prev = dummy;
+
+    while (head != NULL && head->next != NULL) {
+        struct ListNode* first = head;
+        struct ListNode* second = head->next;
+        prev->next = second;
+        first->next = second->next;
+        second->next = first;
+        prev = first;
+        head = first->next;
+    }
+
+    return dummy->next;  
+}
+void printList(struct ListNode* head) {
+    while (head != NULL) {
+        printf("%d", head->val);
+        if (head->next != NULL) {
+            printf(" -> ");
+        }
+        head = head->next;
+    }
+    printf("\n");
+}
+
+void freeList(struct ListNode* head) {
+    struct ListNode* temp;
+    while (head != NULL) {
+        temp = head;
+        head = head->next;
+        free(temp);
+    }
+}
+
